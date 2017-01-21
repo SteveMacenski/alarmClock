@@ -35,10 +35,10 @@ class audio(threading.Thread):
             #TODO call play mp3 for alarm
             pass
         if smooze_hit:
-            #TODO call play mp3 of news
+            #TODO end alarm mp3 and play mp3 of news
             pass
         if alarmoff_hit:
-            #TODO call play mp3 of weather 
+            #TODO end alarm mp3 and  play mp3 of weather 
             pass
 
 
