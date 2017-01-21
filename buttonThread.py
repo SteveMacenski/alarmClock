@@ -6,6 +6,7 @@
 
 import Queue
 import threading
+import Adafruit_MPR121.MPR121 as MPR121
 
 class buttonPresses (threading.Thread):
     def __init__(self, snoozeQue, alarmOffQue):
@@ -15,6 +16,7 @@ class buttonPresses (threading.Thread):
         self.alarmOffQue = alarmOffQue
         self.soundAlarmQue = soundAlarmQue
 
+        self.cap = MPR121.MPR121()
 
     def stop(self):
 
@@ -22,13 +24,22 @@ class buttonPresses (threading.Thread):
 
 
     def run(self):
+        last_touched = cap.touched()
 
         while (self.stopButtons == False):
+            current_touched = self.cap.touched()
 
-            # query for inputs for each button TODO
+            for i in range(12):
 
-            #if snooze pressed
-            # snoozeQue.put(1)
-            #if alarm off pressed
-            # alarmOffQue.put(1)
-            pass
+                pin_bit = 1 << i
+
+                if current_touched & pin_bit and not last_touched & pin_bit:
+                    if i == 0:
+                        # snooze button in 0 slot
+                        snoozeQue.put(1)
+                    if i == 1:
+                        # off button in 1 slot
+                        alarmOffQue.put(1)
+
+                last_touched = current_touched
+                time.sleep(0.1)
