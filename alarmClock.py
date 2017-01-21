@@ -5,6 +5,7 @@
 # Steve Macenski (c) 2017
 import clockThread
 import alarmsThread
+import audioThread
 import buttonThread
 import sys
 import exit
@@ -23,7 +24,8 @@ class alarmClock():
         # start up all of the threads and items
 
         # setup Queue
-        snooze_press = Queue.Queue()
+        snooze_press_audio = Queue.Queue()
+        snooze_press_reset = Queue.Queue()
         alarmOff_press = Queue.Queue()
         soundAlarm = Queue.Queue()
 
@@ -38,7 +40,7 @@ class alarmClock():
 
         print "starting up alarms . . ."
         try:
-            alarms = alarmsThread.alarms(soundAlarm)
+            alarms = alarmsThread.alarms(soundAlarm, snooze_press_reset)
             alarms.setDaemon(True)
             alarms.start()
         except:
@@ -47,7 +49,7 @@ class alarmClock():
 
         print "starting up button sensitivity. . . "
         try:
-            buttons = buttonThread.buttonPresses(snooze_press, alarmOff_press)
+            buttons = buttonThread.buttonPresses(snooze_press_audio, alarmOff_press)
             buttons.setDaemon(True)
             buttons.start()
             pass
@@ -55,7 +57,14 @@ class alarmClock():
             print "button threads FAILED"
             os._exit(1)
 
-
+        print "starting up audio thread. . . "
+        try:
+            audio = audioThread.audio(snooze_press, alarmOff_press, soundAlarm)
+            audio.setDaemon(True)
+            audio.start()
+        except:
+            print "audio thread FAILED"
+            os._exit(1)
 
 clock = alarmClock()
 
