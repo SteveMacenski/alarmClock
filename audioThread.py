@@ -24,19 +24,22 @@ class audio(threading.Thread):
 
     def run(self):
 
-        while (self.stop == False):
-            # while still going, look for threads needing work
+    while (self.stop == False):
+        # while still going, look for threads needing work
 
-            snooze_hit = self.snoozeQ.get(False)
-            alarmoff_hit = self.alarmoffQ.get(False)
-            go_off = self.soundAlarmQ.get(False)
+        snooze_hit = self.snoozeQ.get(False)
+        alarmoff_hit = self.alarmoffQ.get(False)
+        go_off = self.soundAlarmQ.get(False)
 
-            if go_off:
-                #TODO call play mp3 for alarm
-                pass
-            if smooze_hit:
-                #TODO call play mp3 of news
-                pass
-            if alarmoff_hit:
-                #TODO call play mp3 of weather 
-                pass
+        if go_off:
+            #TODO call play mp3 for alarm
+            pass
+        if smooze_hit:
+            #TODO call play mp3 of news
+            pass
+        if alarmoff_hit:
+            #TODO call play mp3 of weather 
+            pass
+
+
+
